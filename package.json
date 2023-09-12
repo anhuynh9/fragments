@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/anhuynh9/fragments/issues"
   },
-  "homepage": "https://github.com/anhuynh9/fragments#readme"
+  "homepage": "https://github.com/anhuynh9/fragments#readme",
+  "devDependencies": {
+    "prettier": "3.0.3"
+  }
 }
