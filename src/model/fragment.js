@@ -122,8 +122,6 @@ class Fragment {
    * @returns {boolean} true if fragment's type is text/*
    */
   get isText() {
-    // TODO
-    const { type } = contentType.parse(this.type);
     return this.type.startsWith('text/');
   }
 

@@ -1,6 +1,6 @@
 // src/routes/index.js
 
-import { authenticate } from '../../src/auth/basic-auth';
+// import { authenticate } from '../../src/auth/basic-auth';
 
 /**
  * Expose all of our API routes on /v1/* to include an API version.

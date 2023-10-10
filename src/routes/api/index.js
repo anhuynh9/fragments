@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const contentType = require('content-type');
 const { Fragment } = require('../../model/fragment'); // Import your Fragment class
+const API_URL = process.env.API_URL || `http://localhost:8080`;
 
 // Define a raw body parser middleware
 const rawBodyParser = express.raw({

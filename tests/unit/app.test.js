@@ -11,6 +11,6 @@ describe('Test 404 Handler', () => {
   it('should return a "Not Found" message', async () => {
     const response = await request(app).get('/not-found');
 
-    expect(response.text).toBe('{\"status\":\"error\",\"error\":{\"message\":\"not found\",\"code\":404}}');
+    expect(response.text).toBe('{"status":"error","error":{"message":"not found","code":404}}');
   });
 });

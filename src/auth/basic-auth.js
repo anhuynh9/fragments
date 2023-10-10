@@ -4,7 +4,7 @@
 // https://github.com/http-auth/http-auth-passport
 
 import { basic } from 'http-auth';
-import { authenticate } from 'passport';
+
 import authPassport from 'http-auth-passport';
 
 // We'll use our authorize middle module

@@ -4,9 +4,9 @@ const {
     writeFragmentData,
     readFragmentData,
 } = require('../../src/model/data');
-const MemoryDB = require('../../src/model/data/memory/memory-db');
-const data = new MemoryDB();
-const metadata = new MemoryDB();
+//const MemoryDB = require('../../src/model/data/memory/memory-db');
+//const data = new MemoryDB();
+//const metadata = new MemoryDB();
 
 describe('In-Memory Database Tests', () => {
     const ownerId = 'user123';
