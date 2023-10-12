@@ -8,7 +8,7 @@
     "test": "jest -c jest.config.js --runInBand --",
     "coverage": "jest -c jest.config.js --runInBand --coverage",
     "lint": "eslint --config .eslintrc.js \"./src/**/*.js\" \"tests/**/*.js\"",
-    "start": "node src/server.js",
+    "start": "node src/index.js",
     "dev": "LOG_LEVEL=debug nodemon ./src/index.js --watch src",
     "debug": "LOG_LEVEL=debug nodemon --inspect=0.0.0.0:9229 ./src/index.js --watch src"
   },
@@ -31,6 +31,7 @@
     "supertest": "^6.3.3"
   },
   "dependencies": {
+    "aws-jwt-verify": "^4.0.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
     "curl": "^0.1.4",
@@ -41,6 +42,7 @@
     "http-auth-passport": "^1.0.7",
     "jq": "^1.7.2",
     "passport": "^0.6.0",
+    "passport-http-bearer": "^1.0.1",
     "pino": "^8.15.1",
     "pino-http": "^8.5.0",
     "pino-pretty": "^10.2.0",
