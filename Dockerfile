@@ -1,43 +1,61 @@
-#a text file that will define all of the Docker instructions necessary for Docker Engine to build an image of our service.
-FROM node
+# Build the fragments backend REST-API server
 
+##########################################################################
+# Stage 0: Install the base dependencies
+FROM node:16.18.0@sha256:6d592fdb89fccdeb880d14f30bf139b8a755f33b376f025b70e50ac5547c8ccf AS dependencies
+# Defining metadata about the image
 LABEL maintainer=" anhuynh <https://github.com/anhuynh9/>"
 LABEL description="Fragments node.js microservice"
 
-# We default to use port 8080 in our service
-ENV PORT=8080
 
+# Defining environment variables
+
+ENV NODE_ENV=production
 # Reduce npm spam when installing within Docker
 # https://docs.npmjs.com/cli/v8/using-npm/config#loglevel
 ENV NPM_CONFIG_LOGLEVEL=warn
-
-# Disable colour when run inside Docker
+#Disable colour when run inside Docker
 # https://docs.npmjs.com/cli/v8/using-npm/config#color
 ENV NPM_CONFIG_COLOR=false
 
-# Use /app as our working directory
+# Create app's working directory in the container
 WORKDIR /app
 
-# Option 3: explicit filenames - Copy the package.json and package-lock.json
-# files into the working dir (/app), using full paths and multiple source
-# files.  All of the files will be copied into the working dir `./app`
-# Option 2: relative path - Copy the package.json and package-lock.json
-# files into the working dir (/app).  NOTE: this requires that we have
-# already set our WORKDIR in a previous step.
+# Copy the package.json and package-lock.json files into the working dir (/app)
 COPY package*.json ./
-
-# Install node dependencies defined in package-lock.json
-RUN npm install
-
 # Copy src to /app/src/
 COPY ./src ./src
+
+# Install node dependencies defined in package-lock.json
+RUN npm ci && \
+    npm uninstall sharp && \
+    npm install --platform=linuxmusl --arch=x64 sharp@0.30.7
 
 # Copy our HTPASSWD file
 COPY ./tests/.htpasswd ./tests/.htpasswd
 
+##########################################################################
+# Stage 1: Build and run the server
+
+FROM node:16.18-alpine3.15@sha256:9598b4e253236c8003d4e4b1acde80a6ca781fc231a7e670ecc2f3183c94ea5e AS production
+
+WORKDIR /
+# install curl and dumb-init
+RUN apk add --no-cache dumb-init~=1.2.5 curl=~7.80.0-r4
+COPY --from=dependencies \
+  /app/node_modules/ /app/ \
+  /app/src/ /app/ \
+  /app/package.json ./
+
+# We default to use port 8080 in our service
+ENV PORT=8080
+
+# Set healthcheck for the server
+HEALTHCHECK --interval=15s --timeout=30s --start-period=10s --retries=3 \
+  CMD curl --fail http://localhost:${PORT}/ || exit 1
+
 # Start the container by running our server
-CMD npm start
+CMD ["dumb-init", "node", "src/index.js"]
 
 # We run our service on port 8080
 EXPOSE 8080
-
