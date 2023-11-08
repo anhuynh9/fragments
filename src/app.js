@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 
 // author and version from our package.json file
-const { author, version } = require('../package.json');
+// const { author, version } = require('../package.json');
 
 const logger = require('./logger');
 const pino = require('pino-http')({
