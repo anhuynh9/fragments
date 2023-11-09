@@ -1,5 +1,5 @@
 # Use a specific version of the Node image
-FROM node:latest
+FROM node:16.18.0@sha256:6d592fdb89fccdeb880d14f30bf139b8a755f33b376f025b70e50ac5547c8ccf
 
 LABEL maintainer="anhuynh <https://github.com/anhuynh9/>"
 LABEL description="Fragments node.js microservice"
