@@ -1,8 +1,11 @@
-#a text file that will define all of the Docker instructions necessary for Docker Engine to build an image of our service.
-FROM node
+# Use a specific version of the Node image
+FROM node:latest
 
-LABEL maintainer=" anhuynh <https://github.com/anhuynh9/>"
+LABEL maintainer="anhuynh <https://github.com/anhuynh9/>"
 LABEL description="Fragments node.js microservice"
+
+# Specify the version of the image
+ENV NODE_VERSION=latest
 
 # We default to use port 8080 in our service
 ENV PORT=8080
