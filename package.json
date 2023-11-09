@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "lab 01 cloud computing for programmers",
   "scripts": {
-    "test:watch": "jest -c jest.config.js --runInBand --watchAll --",
+    "test:watch": "jest -c jest.config.js --runInBand --watch --",
     "test": "jest -c jest.config.js --runInBand --",
     "coverage": "jest -c jest.config.js --runInBand --coverage",
     "lint": "eslint --config .eslintrc.js \"./src/**/*.js\" \"tests/**/*.js\"",
