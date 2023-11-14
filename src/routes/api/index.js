@@ -4,6 +4,7 @@
  * The main entry-point for the v1 version of the fragments API.
  */
 const express = require('express');
+const { Fragment } = require('../../model/fragment');
 
 // Create a router on which to mount our API endpoints
 const router = express.Router();
@@ -14,9 +15,11 @@ router.get('/fragments', require('./get'));
 // Get fragments by id: GET /v1/fragments/:id
 router.get('/fragments/:id', require('./getById'));
 
-// Get fragments info by id: GET /v1/fragments/:id/info
-router.get('/fragments/:id/info', require('./getById'));
+// Get fragments by id: GET /v1/fragments/:id/info
+router.get('/fragments/:id/info', require('./getInfo'));
 
+
+// Support sending various Content-Types on the body up to 5M in size
 const rawBody = () =>
   express.raw({
     inflate: true,
@@ -25,8 +28,11 @@ const rawBody = () =>
       // See if we can parse this content type. If we can, `req.body` will be
       // a Buffer (e.g., `Buffer.isBuffer(req.body) === true`). If not, `req.body`
       // will be equal to an empty Object `{}` and `Buffer.isBuffer(req.body) === false`
-      const { type } = contentType.parse(req);
-      return Fragment.isSupportedType(type);
+
+      // const { type } = contentType.parse(req);
+      // return Fragment.isSupportedType(type);
+      const contentType = req.headers['content-type'];
+      return Fragment.isSupportedType(contentType);
     },
   });
 
