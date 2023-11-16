@@ -45,6 +45,7 @@ function validConversion(contentType, extension) {
 module.exports = async (req, res) => {
   // await Fragment.byUser('1234'))
   const idWithExt = req.params.id;
+  console.log(idWithExt);
   let user = crypto.createHash('sha256').update(req.user).digest('hex');
 
   const idWithExtArray = idWithExt.split('.');
