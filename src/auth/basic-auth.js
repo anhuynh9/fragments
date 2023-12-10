@@ -26,10 +26,5 @@ module.exports.strategy = () => // For our Passport authentication strategy, we'
   );
 }
 
-//export function authenticate() { return authenticate('http', { session: false }); }
-
-// Previously we defined `authenticate()` like this:
-// module.exports.authenticate = () => passport.authenticate('http', { session: false });
-//
 // Now we'll delegate the authorization to our authorize middleware
 module.exports.authenticate = () => authorize('http');

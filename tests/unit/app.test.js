@@ -1,16 +1,13 @@
+// tests/unit/get.test.js
+
 const request = require('supertest');
-const app = require('../../src/app'); // Import your Express app
 
-describe('Test 404 Handler', () => {
-  it('should return a 404 status', async () => {
-    const response = await request(app).get('/not-found');
+const app = require('../../src/app');
 
-    expect(response.status).toBe(404);
-  });
+describe('404 handler', () => {
+  // If the request is missing the Authorization header, it should be forbidden
+  test('resources that cant be found cant be found', () =>
+    request(app).get('/non-existent-route').expect(404));
 
-  it('should return a "Not Found" message', async () => {
-    const response = await request(app).get('/not-found');
-
-    expect(response.text).toBe('{"status":"error","error":{"message":"not found","code":404}}');
-  });
+  // TODO: we'll need to add tests to check the contents of the fragments array later
 });

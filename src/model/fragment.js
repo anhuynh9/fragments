@@ -16,11 +16,19 @@ const {
 
 class Fragment {
   constructor({ id, ownerId, created, updated, type, size = 0 }) {
-
-    if (!ownerId || !type || !Fragment.isSupportedType(type) || !(typeof size === 'number') || size < 0){
-      throw new Error(`Wrong input!`);
-    }else{
-      this.size = size;
+    if (
+      (ownerId &&
+        type &&
+        Fragment.isSupportedType(type) &&
+        typeof size === 'number' &&
+        size >= 0) ||
+      /;\s*charset=/.test(type)
+    ) {
+      if (!size) {
+        this.size = 0;
+      } else {
+        this.size = size;
+      }
       this.id = id || randomUUID();
       this.ownerId = ownerId;
       // this.created = created || JSON.stringify(new Date());
@@ -29,6 +37,15 @@ class Fragment {
       this.update = updated || new Date().toString();
       this.type = type;
       this.save();
+    } else {
+      if (!ownerId) {
+        throw new Error(`Fragment missing ownerId not found!`);
+      }
+      if (!type) {
+        throw new Error(`Fragment missing type not found!`);
+      } else {
+        throw new Error('Fragment type or size is wrong');
+      }
     }
   }
 
@@ -49,18 +66,19 @@ class Fragment {
    * @returns Promise<Fragment>
    */
   static async byId(ownerId, id) {
-    const m_fragment = await readFragment(ownerId, id);
-    if (m_fragment) {
-      const new_frag = new Fragment({id: m_fragment.id,ownerId: m_fragment.ownerId,created: m_fragment.created,
-        update: m_fragment.update,type: m_fragment.type,size: m_fragment.size,});
-
-      return Promise.resolve(new_frag);
-      
-    }
-    else{
+    const fragment = await readFragment(ownerId, id);
+    if (!fragment) {
       throw new Error(`Fragment ${id} not found!`);
     }
-    
+    const newFragment = new Fragment({
+      id: fragment.id,
+      ownerId: fragment.ownerId,
+      created: fragment.created,
+      update: fragment.update,
+      type: fragment.type,
+      size: fragment.size,
+    });
+    return Promise.resolve(newFragment);
   }
 
   /**
@@ -69,8 +87,7 @@ class Fragment {
    * @param {string} id fragment's id
    * @returns Promise<void>
    */
-  static delete(ownerId, id) {
-    // TODO
+  static async delete(ownerId, id) {
     return deleteFragment(ownerId, id);
   }
 
@@ -88,9 +105,12 @@ class Fragment {
    * @returns Promise<Buffer>
    */
   getData() {
-    // TODO
     return readFragmentData(this.ownerId, this.id);
   }
+
+  // static async getData(ownerId, id) {
+  //   return await readFragmentData(ownerId, id);
+  // }
 
   /**
    * Set's the fragment's data in the database
@@ -130,12 +150,12 @@ class Fragment {
    * @returns {Array<string>} list of supported mime types
    */
   get formats() {
-    let format = [];
+    let formats = [];
 
     if (this.type.startsWith('text/plain')) {
-      format = ['text/plain'];
+      formats = ['text/plain'];
     }
-    return format;
+    return formats;
   }
 
   /**
@@ -144,7 +164,7 @@ class Fragment {
    * @returns {boolean} true if we support this Content-Type (i.e., type/subtype)
    */
   static isSupportedType(value) {
-    let validTypes = [
+    let validType = [
       'text/plain',
       'text/plain; charset=utf-8',
       'text/markdown',
@@ -155,7 +175,7 @@ class Fragment {
       'image/webp',
     ];
 
-    return validTypes.includes(value);
+    return validType.includes(value);
   }
 }
 

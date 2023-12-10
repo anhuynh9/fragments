@@ -10,7 +10,7 @@ user1@email.com:password1
 `{"service": "DynamoDB"}`
 
 # 1. We expect to get back an HTTP 201
-HTTP/1.1 404
+HTTP/1.1 201
 # We have various assertions about the response that we want to check
 [Asserts]
 # The Location header should look like what we expect (including the fragment id)

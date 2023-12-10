@@ -18,6 +18,9 @@ module.exports = (strategyName) => {
      */
     function callback(err, email) {
       // Something failed, let the the error handling middleware deal with it
+
+      console.log('email - ' + email);
+      console.log('error - ' + err);
       if (err) {
         logger.warn({ err }, 'error authenticating user');
         return next(createErrorResponse(500, 'Unable to authenticate user'));

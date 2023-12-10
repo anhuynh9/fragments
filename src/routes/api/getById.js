@@ -1,5 +1,8 @@
+// src/routes/api/get.js
 const crypto = require('crypto');
 const { Fragment } = require('../../model/fragment');
+// Use https://www.npmjs.com/package/content-type to create/parse Content-Type headers
+// const contentType = require('content-type');
 /**
  * Get a list of fragments for the current user
  */
@@ -9,7 +12,7 @@ const createErrorResponse = require('../../response').createErrorResponse;
 function validConversion(contentType, extension) {
   let formats = [];
   switch (contentType) {
-    case contentType.includes('text/plain'):
+    case 'text/plain':
       formats = ['.txt'];
       break;
     case 'text/markdown':
@@ -43,9 +46,8 @@ function validConversion(contentType, extension) {
 }
 
 module.exports = async (req, res) => {
-  // await Fragment.byUser('1234'))
+  // await Fragment.byId('1234'))
   const idWithExt = req.params.id;
-  console.log(idWithExt);
   let user = crypto.createHash('sha256').update(req.user).digest('hex');
 
   const idWithExtArray = idWithExt.split('.');
@@ -64,51 +66,47 @@ module.exports = async (req, res) => {
   const idList = await Fragment.byUser(user);
 
   if (idList.includes(id)) {
-    const fragment = await Fragment.byId(user, id);
+    const fragmentObject = await Fragment.byId(user, id);
+    let fragment;
 
-    let dataResult = null;
+    if (fragmentObject instanceof Fragment) {
+      fragment = fragmentObject;
+    } else {
+      fragment = new Fragment({
+        id: id,
+        ownerId: fragmentObject.ownerId,
+        created: fragmentObject.created,
+        update: fragmentObject.update,
+        type: fragmentObject.type,
+        size: fragmentObject.size,
+      });
+    }
 
-    if (!ext) {
-      if (fragment.isText) {
-        if (fragment.mimeType.includes('markdown') || fragment.mimeType.includes('html')) {
-          let html = await fragment.getData();
-          dataResult = '<h1>' + html + '</h1>';
-          console.log('In html: ' + dataResult);
-        } else {
+    if (fragment) {
+      let dataResult = null;
+
+      if (!ext) {
+        
+        dataResult = await fragment.getData();
+      } else {
+        if (validConversion(fragment.mimeType, ext)) {
+          
           dataResult = await fragment.getData();
         }
       }
-    } else {
-      if (validConversion(fragment.mimeType, ext)) {
-        if (fragment.isText) {
-          if (fragment.mimeType.includes('markdown') || fragment.mimeType.includes('html')) {
-            let html = await fragment.getData();
-            dataResult = '<h1>' + html + '</h1>';
-            console.log('In html: ' + dataResult);
-          } else {
-            dataResult = await fragment.getData();
-          }
-        } else {
-          dataResult = await fragment.getData();
-        }
+
+      if (dataResult) {
+        res.setHeader('Content-Type', fragment.mimeType);
+        res.status(200).send(dataResult);
       } else {
+        const error = 'Cannot convert from ' + fragment.mimeType + ' to ' + ext;
         createErrorResponse(
           res.status(415).json({
-            message: 'Cannot convert from ' + fragment.mimeType + ' to ' + ext,
+            code: 415,
+            message: error,
           })
         );
       }
-    }
-
-    if (dataResult) {
-      console.log('In send: ' + dataResult);
-      res.status(200).send(dataResult);
-    } else {
-      createErrorResponse(
-        res.status(415).json({
-          message: 'Cannot convert from ' + fragment.mimeType + ' to ' + ext,
-        })
-      );
     }
   } else {
     createErrorResponse(
@@ -117,6 +115,4 @@ module.exports = async (req, res) => {
       })
     );
   }
-
-  
 };
