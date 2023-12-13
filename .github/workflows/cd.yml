@@ -108,10 +108,10 @@ jobs:
             #   AWS_S3_BUCKET_NAME=anhuynh9-fragments
             #   AWS_DYNAMODB_TABLE_NAME=fragments
 
-        - name: Deploy Amazon ECS task definition
-          uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-          with:
-            task-definition: ${{ steps.update-task-def.outputs.task-definition }}
-            cluster: fragments-cluster-1
-            service: fragments-service-1
-            wait-for-service-stability: true
+        # - name: Deploy Amazon ECS task definition
+        #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        #   with:
+        #     task-definition: ${{ steps.update-task-def.outputs.task-definition }}
+        #     cluster: fragments-cluster-1
+        #     service: fragments-service-1
+        #     wait-for-service-stability: true
