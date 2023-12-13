@@ -1,7 +1,7 @@
 {
   "name": "fragments",
   "private": true,
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "lab 01 cloud computing for programmers",
   "scripts": {
     "test:watch": "jest -c jest.config.js --runInBand --watchAll --",
