@@ -102,7 +102,7 @@ jobs:
             # environment-variables: |
             #   LOG_LEVEL=info
             #   NODE_ENV=production
-            #   API_URL=http://ec2co-ecsel-1ahmttdjgom4j-761582438.us-east-1.elb.amazonaws.com:8080/
+            #   API_URL=http://ec2-274521603812-2092905327.us-east-1.elb.amazonaws.com:8080/
             #   HTPASSWD_FILE=tests/.htpasswd
             #   PORT=8080
             #   AWS_S3_BUCKET_NAME=anhuynh9-fragments
