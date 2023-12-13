@@ -1,5 +1,0 @@
-{
-    "ipcMode": null,
-    "executionRoleArn": "arn:aws:iam::247962128096:role/LabRole",
-    "taskRoleArn": null
-}
