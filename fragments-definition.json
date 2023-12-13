@@ -62,7 +62,7 @@
       "memoryReservation": 512,
       "volumesFrom": [],
       "stopTimeout": null,
-      "image": "knight1972001/fragments:latest",
+      "image": "anhuynh9/fragments:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -84,9 +84,9 @@
   ],
   "placementConstraints": [],
   "memory": "512",
-  "taskRoleArn": "arn:aws:iam::531628981144:role/LabRole",
+  "taskRoleArn": "arn:aws:iam::274521603812:role/LabRole",
   "compatibilities": ["EC2", "FARGATE"],
-  "taskDefinitionArn": "arn:aws:ecs:us-east-1:531628981144:task-definition/fragments-task:2",
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:274521603812:task-definition/fragments-task:2",
   "family": "fragments-task",
   "requiresAttributes": [
     {
